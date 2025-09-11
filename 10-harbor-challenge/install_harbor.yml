@@ -1,0 +1,42 @@
+- name: Install Harbor
+  hosts: all
+  become: true
+  tasks:
+  
+    - name: download tar folder
+      ansible.builtin.get_url:
+        url: "https://github.com/goharbor/harbor/releases/download/v2.5.6/harbor-online-installer-v2.5.6.tgz"
+        dest: "/tmp/harbor.tgz"
+    
+    - name: extract tar
+      unarchive:
+        src: "/tmp/harbor.tgz"     		
+        dest: "/opt"    		
+        remote_src: yes     		
+    
+    - name: copy harbor yaml
+      ansible.builtin.copy:
+        src: "/opt/harbor/harbor.yml.tmpl"  
+        dest: "/opt/harbor/harbor.yml"
+        remote_src: yes 
+    
+    - name: Set hostname in harbor.yml
+      ansible.builtin.replace:
+        path: "/opt/harbor/harbor.yml"
+        regexp: 'hostname:\s*.*'
+        replace: 'hostname: harbor.dev.purelogicit.ca' 
+
+    - name: Replace certificate path using replace
+      ansible.builtin.replace:
+        path: "/opt/harbor/harbor.yml"
+        regexp: 'certificate:\s*.*'
+        replace: 'certificate: /data/certs/harbor.crt'
+
+    - name: Replace private key path using replace
+      ansible.builtin.replace:
+        path: "/opt/harbor/harbor.yml"
+        regexp: 'private_key:\s*.*'
+        replace: 'private_key: /data/certs/harbor.key'    
+
+    - name: install harbor
+      ansible.builtin.shell: cd /opt/harbor && sudo ./install.sh 
