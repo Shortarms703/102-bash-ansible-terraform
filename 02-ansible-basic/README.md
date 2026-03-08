@@ -84,7 +84,7 @@ Ansible has the concept of list, we can loop through items of the list. In older
 This playbook works, but isn't "best pratice" for the current versions of ansible. We're refering to the modules only by their names and not their collection. By default ansible will assume you are refering to the `ansible.builtin` collection but if a local module has the same name it will be used and could cause issues. So rewritting the entire playbook with the collection names will look like this.
 
 ***first-playbook.yaml***
-```
+```yaml
 - hosts: all
   vars:
     msg:
@@ -141,7 +141,7 @@ ubuntu:
 ```
 
 ***first-playbook.yaml***
-```
+```yaml
 - hosts: all
   tasks:
     - name: echo with var
