@@ -45,7 +45,6 @@ The other way is to use the `debug` task. Before we can use that we need to capt
 ```
 
 This playbook is very static and won't be too useful in a normal environment. We'll add variables to make more dynamic.
-```
 
 ***first-playbook.yaml***
 ```yaml
