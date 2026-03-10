@@ -3,7 +3,7 @@
 For an excersise and reusability go back to the [101-linux-certificates-git](https://github.com/PureLogicIT/101-linux-certificates-git) git repo and recreate everything we did there but in Ansible.
 
 High Level Tasks:
-* Rename host to use the ansible's name has their hostname
+* Rename host to use the ansible's name as their hostname
 * Patch the VMs
 * Create the `courseadmin` group
 * Give the group sudoers access to `apt-get`
