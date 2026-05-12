@@ -1,4 +1,5 @@
 # Understanding Roles and Ansible Galaxy
+
 ## What are Roles in Ansible?
 
 Ansible roles are a way to organize and modularize your configuration and automation tasks. They allow you to break down your playbooks into reusable and structured components. Each role encapsulates a specific functionality, making it easier to manage and reuse tasks, variables, files, and templates across multiple playbooks or projects.
@@ -17,7 +18,7 @@ Here’s how you would use a role in an Ansible playbook:
     - apache
 ```
 
-In this example `apache` role will execute all tasks, use any variables, and apply configurations files defined in its directory.
+In this example, the `apache` role will execute all tasks, use any variables, and apply configurations files defined in its directory.
 
 ### Role Directory Structure
 
@@ -48,9 +49,9 @@ roles/
 
 This Role installs the Apache web server, configures it with a template file, and starts the service.
 
-> **Directory Structure:**
+Directory Structure:
 
-```css
+```text
 roles/
   apache/
     tasks/
@@ -59,7 +60,7 @@ roles/
       apache.conf.j2
 ```
 
-> tasks/main.yml:
+`tasks/main.yml`
 
 ```yaml
 - name: Install Apache
@@ -83,16 +84,16 @@ roles/
 
 This role configures firewall rules for a web server.
 
-> **Directory Structure:**
+Directory Structure:
 
-```css
+```text
 roles/
   firewall/
     tasks/
       main.yml
 ```
 
-tasks/main.yml
+`tasks/main.yml`
 
 ```yaml
 - name: Allow HTTP Traffic
@@ -107,19 +108,21 @@ tasks/main.yml
     state: reloaded
 ```
 
-
 ## Ansible Galaxy
 
 **Ansible Galaxy** is a platform for sharing, discovering, and downloading Ansible roles and collections. It simplifies the process of finding reusable roles created by the Ansible community or official contributors. Instead of writing every role from scratch, you can search for pre-written roles on Ansible Galaxy that meet your needs, saving time and effort.
 
-> **Using Ansible Galaxy**
+### Using Ansible Galaxy
 
-> 1. **Search for Roles:** You can search for roles on the [Ansible Galaxy](https://galaxy.ansible.com/) website.
-> 2. **Install a Role:** Use the `ansible-galaxy` command to download and install a role. For example:
-```bash
-ansible-galaxy install geerlingguy.apache
-```
-> 3. **Use the Installed Role:** Include the role in your playbook just like any other role. 
+1. **Search for Roles:** You can search for roles on the [Ansible Galaxy](https://galaxy.ansible.com/) website.
+
+2. **Install a Role:** Use the `ansible-galaxy` command to download and install a role. For example:
+
+    ```bash
+    ansible-galaxy install geerlingguy.apache
+    ```
+
+3. **Use the Installed Role:** Include the role in your playbook just like any other role. 
 
 **Example Workflow**
 
@@ -133,11 +136,13 @@ ansible-galaxy install geerlingguy.apache
     - geerlingguy.apache
 ``` 
 
-### Save to git
+## Save to git
+
 Time to save our progress!
+
 ```bash
 git add .
-git commit -m "ansible galaxies and roles"
+git commit -m "Ansible galaxies and roles"
 git push
 
 ```

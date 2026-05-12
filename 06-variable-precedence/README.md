@@ -38,7 +38,7 @@ Ansible accepts a broad range of values for boolean variables: `true/false`, `1/
 
 ### List Variables
 
-A list variable combines a variable name with multiple values. The multiple values can be stored as an itemized list or in square brackets [], separated with commas.
+A list variable combines a variable name with multiple values. The multiple values can be stored as an itemized list or within square brackets [], separated with commas.
 
 You can define variables with multiple values using YAML lists. For example:
 
@@ -49,7 +49,7 @@ region:
   - midwest
 ```
 
-When you use variables defined as a list (also called an array), you can use individual, specific fields from that list. The first item in a list is item 0, the second item is item 1. For example:
+When you use variables defined as a list (also called an array), you can use individual, specific fields from that list. The first item in a list is item 0, the second item is item 1, and so on. For example:
 
 ```yaml
 region: "{{ region[0] }}"
@@ -74,7 +74,7 @@ foo.field1
 
 ### Registering Variables
 
-You can create variables from the output of an Ansible task with the task keyword `register`. You can use registered variables in any later tasks in your play. For example, the shell command will only be run when the return code (rc) of the registered variable equals 5:
+You can create variables from the output of an Ansible task with the task keyword `register`. You can use registered variables in any later tasks in your play. For example, the shell command will only be run when the return code (`rc`) of the registered variable equals 5:
 
 ```yaml
 - hosts: web_servers
@@ -118,8 +118,7 @@ Here is the order of precedence from least to greatest (the last listed variable
 19. set_facts / registered vars
 20. role (and include_role) params
 21. include params
-22. extra vars (for example, -e "user=my_user")(always win precedence)
-
+22. extra vars (for example, -e "user=my_user") (always win precedence)
 
 ## Scoping Variables
 

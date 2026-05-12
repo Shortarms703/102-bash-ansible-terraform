@@ -10,8 +10,8 @@ Take a look at the manual installation method and see the steps required each ti
 
 See how the requirements from the manual install have been recreated in ansible:
 
-
 ### Ensure the latest version of requirements is installed
+
 ```yml
     - name: Install required system packages
       apt:
@@ -21,21 +21,27 @@ See how the requirements from the manual install have been recreated in ansible:
         state: latest
         update_cache: true
 ```
+
 ### Add the docker gpg key
+
 ```yml
     - name: Add Docker GPG apt Key
       apt_key:
         url: https://download.docker.com/linux/ubuntu/gpg
         state: present
 ```
+
 ### Add the Docker repository to apt sources
+
 ```yml
     - name: Add Docker Repository
       apt_repository:
         repo: deb https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
         state: present
 ```
+
 ### Update and install docker-ce
+
 ```yml
     - name: Update apt and install docker-ce
       apt:
@@ -43,7 +49,9 @@ See how the requirements from the manual install have been recreated in ansible:
         state: latest
         update_cache: true
 ```
-### create and add user to docker group
+
+### Create and add user to docker group
+
 ```yml
 # sudo groupadd docker
 - name: Create "docker" group
@@ -58,20 +66,24 @@ See how the requirements from the manual install have been recreated in ansible:
     group: "docker"
     append: yes
 ```
-Be sure to add the pluser to the docker group. Either inline or in the variable file.
+
+Be sure to add `pluser` to the docker group, either inline or in the variable file.
+
 ## Install Docker-ce using Ansible
 
-Run the following command to install docker-ce on your `HOST2` machine TODO
+Run the following command to install `docker-ce` on your `HOST2` machine TODO
 
 ```bash
 ansible-playbook -i inventory.yml docker-install.yml
 ```
 
-### Save to git
+## Save to git
+
 Time to save our progress!
+
 ```bash
 git add .
-git commit -m "ansible install docker"
+git commit -m "Ansible install docker"
 git push
 
 ```

@@ -1,17 +1,16 @@
-# Ansible Patching
+# Ansible Automation of Linux Basics
 
-For an excersise and reusability go back to the [101-linux-certificates-git](https://github.com/PureLogicIT/101-linux-certificates-git) git repo and recreate everything we did there but in Ansible.
+As an exercise and for reusability go back to the [101-linux-certificates-git](https://github.com/PureLogicIT/101-linux-certificates-git) git repo and recreate everything we did there but in Ansible.
 
 High Level Tasks:
-* Rename host to use the ansible's name as their hostname
+* Rename host to use the ansible name as their hostname
 * Patch the VMs
 * Create the `courseadmin` group
 * Give the group sudoers access to `apt-get`
 * Create two new users (user1, user2)
 * Add them to courseadmin group
 * Add the CA certificate to the server
-* Install NGINX on server1
-* Install ScribbleRS on server1
-
+* Install NGINX on webserver
+* Install ScribbleRS on webserver
 
 Once done, don't forget to commit your changes to git

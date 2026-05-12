@@ -1,8 +1,9 @@
-# Ansible Patching
+# Ansible Basics
 
-We'll create our first 'playbook'
+Create your first 'playbook'. 
 
-***first-playbook.yaml***
+`first-playbook.yml`
+
 ```yaml
 ---
 - hosts: all
@@ -14,19 +15,21 @@ We'll create our first 'playbook'
 Run the playbook.
 
 ```bash
-ansible-playbook first-playbook.yaml
+ansible-playbook first-playbook.yml
 ```
 
 So we can see that it ran and did something, but not what it actually did. There a few options to see that. The first would be to use verbose mode `-v`.
 
 ```bash
-ansible-playbook -v first-playbook.yaml
+ansible-playbook -v first-playbook.yml
 ```
 
-The other way is to use the `debug` task. Before we can use that we need to capture the output of the first command
+The other way is to use the `debug` task. Before we can use that we need to capture the output of the first command. 
 
+Edit the `first-playbook.yml` file to the following. 
 
-***first-playbook.yaml***
+`first-playbook.yml`
+
 ```yaml
 ---
 - hosts: all
@@ -44,9 +47,16 @@ The other way is to use the `debug` task. Before we can use that we need to capt
         msg: "{{echo}}"
 ```
 
-This playbook is very static and won't be too useful in a normal environment. We'll add variables to make more dynamic.
+Run the playbook again. We can now see the entire debug output for each task. 
 
-***first-playbook.yaml***
+```bash
+ansible-playbook first-playbook.yml
+```
+
+This playbook is very static and won't be too useful in a normal environment. We'll add variables to make it more dynamic.
+
+Update `first-playbook.yml` to match the following. 
+
 ```yaml
 ---
 - hosts: all
@@ -57,9 +67,12 @@ This playbook is very static and won't be too useful in a normal environment. We
       command: 'echo "{{ msg }}"'
 ```
 
-Ansible has the concept of list, we can loop through items of the list. In older versions of ansible you will see this referenced has `with_items`, that is still backwards compatible but will be depricated eventually.
+Run the playbook. 
 
-***first-playbook.yaml***
+Ansible has the concept of lists, and items of a list can be looped through. In older versions of ansible you will see this referenced as `with_items`. It is still backwards compatible but will be deprecated eventually.
+
+Update `first-playbook.yml` to match the following. 
+
 ```yaml
 ---
 - hosts: all
@@ -81,9 +94,12 @@ Ansible has the concept of list, we can loop through items of the list. In older
         - six
 ```
 
-This playbook works, but isn't "best pratice" for the current versions of ansible. We're refering to the modules only by their names and not their collection. By default ansible will assume you are refering to the `ansible.builtin` collection but if a local module has the same name it will be used and could cause issues. So rewritting the entire playbook with the collection names will look like this.
+Run the playbook to see its output. 
 
-***first-playbook.yaml***
+This playbook works, but is not "best practice" for the current versions of ansible. We're referring to the modules only by their names and not their collection. By default, ansible will assume you are referring to the `ansible.builtin` collection, but if a local module has the same name, then it will be used and could cause issues. So rewriting the entire playbook with the collection names will look like this.
+
+`first-playbook.yml`
+
 ```yaml
 - hosts: all
   vars:
@@ -115,32 +131,38 @@ This playbook works, but isn't "best pratice" for the current versions of ansibl
        var: echo
 ```
 
-Lastly we'll move the variable to the inventory file which makes more sense as a global variable.
+Run the playbook to make sure that the functionality has not changed. 
 
-***inventory/hosts.yaml***
+Lastly, move the variable definitions to the inventory file, as they make more sense as global variables.
+
+Update the following 2 files, then run the playbook again. 
+
+`inventory/hosts.yml`
+
 ```yaml
 nginx:
   hosts:
-    server1
+    webserver
 ubuntu:
   hosts:
-    server1:
-      ansible_host: 172.16.1.91
+    webserver:
+      ansible_host: webserver
       msg:
         - one
         - two
         - three
-    server2:
-      ansible_host: 172.16.1.78
+    pki-server:
+      ansible_host: pki-server
       msg:
         - four
         - five
         - six
   vars:
-   ansible_user: ansibleuser   
+    ansible_user: ansibleuser
 ```
 
-***first-playbook.yaml***
+`first-playbook.yml`
+
 ```yaml
 - hosts: all
   tasks:
@@ -153,7 +175,4 @@ ubuntu:
     - name: debug var echo
       ansible.builtin.debug:
        var: echo
-
 ```
-
-

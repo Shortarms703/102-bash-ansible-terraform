@@ -39,4 +39,4 @@
         replace: 'private_key: /data/certs/harbor.key'    
 
     - name: install harbor
-      ansible.builtin.shell: cd /opt/harbor && sudo ./install.sh 
+      ansible.builtin.shell: cd /opt/harbor && sudo ./install.sh --with-trivy

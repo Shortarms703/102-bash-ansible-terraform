@@ -8,7 +8,7 @@ The code block below will check for pending updates, elevate to root to perform 
   serial: 2 # Serial is used to control how many hosts are managed at a time, in this case 2 at a time. Without specifying this, the default will run against all hosts in parallel.
   tasks:
     - name: Checking for pending updates
-      command: /usr/lib/update-notifier/apt-check --package-names # This command checks for packages that have available updates and then lists the names, and registers those package names to the varialbe "packages"
+      command: /usr/lib/update-notifier/apt-check --package-names # This command checks for packages that have available updates and then lists the names, and registers those package names to the variable "packages"
       register: packages
       changed_when: packages.stderr != "" # This will only result in a "changed" status reported by ansible when the output from stderr is not blank, so there will be no changes reported if there are no new package updates available
 
@@ -17,7 +17,7 @@ The code block below will check for pending updates, elevate to root to perform 
       apt: 
         update_cache: yes # This is the equivalent of apt-get update, which gets info about latest package versions and dependencies
         upgrade: full # This is the equivalent of running apt-get upgrade. The other options here are no, dist, and safe.
-        autoremove: yes # This removes unused dependency pacakges
+        autoremove: yes # This removes unused dependency packages
       when: packages.stderr != "" # This line sets the condition on when to run this task, in this case it only runs if there were no errors reported in the "Checking for pending updates" task
 
     - name: Check if a reboot is required

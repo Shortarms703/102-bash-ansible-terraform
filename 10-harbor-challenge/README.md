@@ -11,5 +11,5 @@ cp harbor/harbor.yml.tmpl harbor/harbor.yml
 sed -i "s/hostname: .*/hostname: harbor.dev.purelogicit.ca/g" harbor/harbor.yml
 sed -i "s/  certificate: .*/  certificate: \/data\/certs\/harbor.crt/g" harbor/harbor.yml
 sed -i "s/  private_key: .*/  private_key: \/data\/certs\/harbor.key/g" harbor/harbor.yml
-cd harbor && sudo./install.sh --with-trivy
+cd harbor && sudo ./install.sh --with-trivy
 ```
