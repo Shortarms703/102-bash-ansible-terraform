@@ -1,6 +1,11 @@
 # Ansible Patching
 
-The code block below will check for pending updates, elevate to root to perform updates if there are any available, and then check if a reboot flag exists to then reboot if necessary. This example is targeting a Ubuntu host. 
+This Ansible playbook is targeting a Ubuntu host and performs the following sequence:
+
+1. First, checking for pending updates.
+2. Then actually look for and install updates (update, upgrade, autoremove).
+3. Checks if there's a reboot required, since sometimes updates have a reboot required after they install.
+4. Then run the reboot if necessary.
 
 ```yaml
 ---
@@ -34,11 +39,40 @@ The code block below will check for pending updates, elevate to root to perform 
       register: restart_status
 ```
 
-### Save to git
+## Cleaning up the file with Vim Macros
+
+The playbook above has a lot of inline comments (starting with `#`), which can make it a bit hard to read. Let's use Vim macros to clean it up.
+
+Copy the playbook above into your file using `vi patching.yml`.
+
+Then, run the following VIM macros to remove the comments. Enter each of the following right after opening the `patching.yml` file:
+
+1. `q` - enter macro recording mode
+2. `a` - name the macro "a"
+3. `/^#` - search for a comment character at the beginning of a line
+4. `<Press Enter>` - execute the search
+5. `d$` - delete from the cursor to the end of the line
+6. `q` - finish recording the macro
+
+Now that the macro `a` is recorded, you can execute it multiple times to clean up the rest of the file.
+
+Type `@a` to run the macro once, or `20@a` to run the macro 20 times. It will jump to each `#` and delete the comment. 
+
+## Referencing Ansible Documentation
+
+As you work with these modules, it's highly recommended to look at the official Ansible documentation for all of them.
+
+- `stat` module: Go look at the Ansible docs for `ansible.builtin.stat`. Skip down to the Examples section and find "Get stats of the FS object" under the `Examples` section. You'll see how we use `stat`. Then, look under the `Return Values` section for `stat.exists`.
+- `apt` module: Look in the `Examples` section of the `ansible.builtin.apt` module. You'll find standard update/upgrade tasks in the examples, similar to the one in our patching task. 
+- `state` parameter: For many Ansible modules, the `state` parameter is a pretty important one, and `state: present` will almost always be there as a default, under the parameters section of the documentation.
+
+## Save to git
+
 Time to save our progress!
+
 ```bash
 git add .
-git commit -m "patching"
+git commit -m "Ansible Patching"
 git push
-
 ```
+ 

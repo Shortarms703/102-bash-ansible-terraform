@@ -1,8 +1,6 @@
 # Challenge: Install Harbor
 
-## Description:
-
-Convert the bash script below into an Ansible playbook. Then run and install Harbor on server 2. 
+Convert the bash script below into an Ansible playbook. Then run and install Harbor on `pki-server`. 
 
 ```bash
 wget -O harbor.tgz https://github.com/goharbor/harbor/releases/download/v2.5.6/harbor-online-installer-v2.5.6.tgz

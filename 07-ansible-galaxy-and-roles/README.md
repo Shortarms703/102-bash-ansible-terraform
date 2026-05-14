@@ -43,74 +43,70 @@ roles/
       main.yml       # Role metadata
 ```
 
-### Example Roles
+- **`tasks/`**: The most important folder. This contains the actual tasks that run.
+- **`handlers/`**: Used to call tasks when something else finishes (e.g., restarting a service or cleaning up after a crash). We won't cover these in depth.
+- **`templates/`**: When you reference a template in a task, Ansible looks here first.
+- **`files/`**: When you reference a file in a task, Ansible looks here first, before checking other spots.
+- **`vars/`**: Variables defined here are strict and **not** intended to be overridden.
+- **`defaults/`**: Default variables that **are** intended to be overridden.
+- **`meta/`**: Contains metadata and comments for documentation. We won't cover these in depth.
 
-**Example Role 1: Installing and configuring Apache**
+### Creating a Role
 
-This Role installs the Apache web server, configures it with a template file, and starts the service.
+Convert our previous patching playbook into an organized role.
 
-Directory Structure:
+First, use `ansible-galaxy init` to automatically generate the standard role directory structure for us:
 
-```text
-roles/
-  apache/
-    tasks/
-      main.yml
-    templates/
-      apache.conf.j2
+```bash
+mkdir roles
+cd roles
+ansible-galaxy init patching
+cd ..
 ```
 
-`tasks/main.yml`
+To see the structure it created, run:
+
+```bash
+tree -d roles/patching
+```
+
+Next, open the previous `patching.yml` file from the patching exercise, copy the tasks, and paste them into `roles/patching/tasks/main.yml`.
+
+When you paste them, they will likely have 4 spaces of indentation from being nested in the old playbook. Remove those spaces so the `- name:` list aligns to the left margin. You can quickly remove the leading spaces using this Vim substitution command:
+
+```vim
+:%s/^    //g
+```
+
+- As you enter the `spaces`, you will see them highlighting the text that will be selected. You can use this as a judge for how many spaces to enter.
+
+Now that your role is fully created, let's make a brand new `patching.yml` playbook at the root of your project that is much cleaner.
+
+`patching.yml`
 
 ```yaml
-- name: Install Apache
-  ansible.builtin.yum:
-    name: httpd
-    state: present
-
-- name: Deploy Apache Configuration
-  ansible.builtin.template:
-    src: apache.conf.j2
-    dest: /etc/httpd/conf/httpd.conf
-
-- name: Start Apache Service
-  ansible.builtin.service:
-    name: httpd
-    state: started
-    enabled: true
+---
+- hosts: all
+  serial: 2
+  roles:
+    - patching
 ```
 
-**Example Role2: Configuring a Firewall**
+- `serial: 2`: This tells Ansible to process no more than 2 hosts in parallel at a time, which is useful for safe rolling updates.
 
-This role configures firewall rules for a web server.
+Run this new playbook:
 
-Directory Structure:
-
-```text
-roles/
-  firewall/
-    tasks/
-      main.yml
+```bash
+ansible-playbook patching.yml
 ```
 
-`tasks/main.yml`
-
-```yaml
-- name: Allow HTTP Traffic
-  ansible.builtin.firewalld:
-    port: 80/tcp
-    state: enabled
-    permanent: true
-
-- name: Reload Firewall Rules
-  ansible.builtin.service:
-    name: firewalld
-    state: reloaded
-```
+It will work exactly like before, but now the logic is encapsulated entirely within a reusable role! We will be using this role later in the course.
 
 ## Ansible Galaxy
 
 **Ansible Galaxy** is a platform for sharing, discovering, and downloading Ansible roles and collections. It simplifies the process of finding reusable roles created by the Ansible community or official contributors. Instead of writing every role from scratch, you can search for pre-written roles on Ansible Galaxy that meet your needs, saving time and effort.
+
+*Note: While Ansible Galaxy points to the public community repository by default, organizations can configure it to point to their own local or private Galaxy server.*
 
 ### Using Ansible Galaxy
 
@@ -124,7 +120,7 @@ roles/
 
 3. **Use the Installed Role:** Include the role in your playbook just like any other role. 
 
-**Example Workflow**
+#### Example Workflow
 
 ```bash
 # Install a role from Galaxy
@@ -144,5 +140,4 @@ Time to save our progress!
 git add .
 git commit -m "Ansible galaxies and roles"
 git push
-
 ```

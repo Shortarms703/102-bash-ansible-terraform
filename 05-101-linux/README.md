@@ -3,6 +3,7 @@
 As an exercise and for reusability go back to the [101-linux-certificates-git](https://github.com/PureLogicIT/101-linux-certificates-git) git repo and recreate everything we did there but in Ansible.
 
 High Level Tasks:
+
 * Rename host to use the ansible name as their hostname
 * Patch the VMs
 * Create the `courseadmin` group
@@ -13,4 +14,6 @@ High Level Tasks:
 * Install NGINX on webserver
 * Install ScribbleRS on webserver
 
-Once done, don't forget to commit your changes to git
+For many of these tasks, refer back to previous exercises, or check the `Examples` section of the ansible module documentation. 
+
+Once done, don't forget to commit your changes to git.

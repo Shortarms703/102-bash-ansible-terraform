@@ -35,6 +35,6 @@
 # sudo usermod -aG docker root
     - name: Add remote "ubuntu" user to "docker" group
       user:
-        name: "{{ user }}"
+        name: "{{ username }}"
         group: "docker"
         append: yes

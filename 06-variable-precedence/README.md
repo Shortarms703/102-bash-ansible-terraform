@@ -27,6 +27,8 @@ ansible.builtin.template:
   dest: '{{ remote_install_path }}/foo.cfg'
 ```
 
+**Note on Jinja2:** Notice the `{{ }}` syntax around the variable name. This is Jinja2 templating syntax. It tells Ansible to evaluate the variable inside the brackets instead of treating it as literal text. Jinja templating will be encountered frequently when working with Ansible, like when generating encrypted passwords or managing configurations.
+
 ### Boolean Variables
 
 Ansible accepts a broad range of values for boolean variables: `true/false`, `1/0`, `yes/no`, `True/False` and so on. The matching of valid strings is case insensitive. While documentation examples focus on `true/false` to be compatible with `ansible-lint` default settings, you can use any of the following:
@@ -35,6 +37,10 @@ Ansible accepts a broad range of values for boolean variables: `true/false`, `1/
 |------------------------------------------------------------|---------------|
 | True , 'true' , 't' , 'yes' , 'y' , 'on' , '1' , 1 , 1.0   | Truthy values |
 | False , 'false' , 'f' , 'no' , 'n' , 'off' , '0' , 0 , 0.0 | Falsy values  |
+
+**Warning:** Because words like `on` or `yes` are evaluated as booleans, you must be careful when using them as strings. For example, if you are setting a variable for the province of Ontario to `on`, you must quote it like `province: "on"`, otherwise Ansible will interpret it as `True`.
+
+This flexibility also means that for parameters requiring a boolean, like `become`, you can write `become: yes`, `become: true`, or `become: on` and they will all work exactly the same.
 
 ### List Variables
 
@@ -49,13 +55,15 @@ region:
   - midwest
 ```
 
-When you use variables defined as a list (also called an array), you can use individual, specific fields from that list. The first item in a list is item 0, the second item is item 1, and so on. For example:
+When you use variables defined as a list (also called an array), you can access individual items from that list using an index. Ansible (like Python) uses zero-indexed lists, meaning the first item in a list is `[0]`, the second item is `[1]`, and so on. For example, to get the first region from the list above:
 
 ```yaml
-region: "{{ region[0] }}"
+region_choice: "{{ region[0] }}"
 ```
 
 ### Key:Value Dictionaries
+
+Dictionaries allow you to group related key-value pairs together under a single parent key using indentation.
 
 Define using the format:
 
@@ -93,7 +101,15 @@ You can create variables from the output of an Ansible task with the task keywor
 
 ## What is Variable Precedence
 
-Ansible does apply variable precedence, and you might have a use for it. Variable precedence can be useful to set baselines for a typical deployment while allowing for more granular control when needed. In general, Ansible ***gives precedence to variables that were defined more recently, more actively, and with more explicit scope***. Variables in the defaults folder inside a role are easily overridden. Anything in the vars directory of the role overrides previous versions of that variable in the namespace.
+Ansible does apply variable precedence, and you might have a use for it. Variable precedence can be useful to set baselines for a typical deployment while allowing for more granular control when needed. In general, Ansible ***gives precedence to variables that were defined more recently, more actively, and with more explicit scope***. 
+
+**Best Practice:** As an organization, it is highly important to decide on a standard for where your variables will go. Because Ansible gives you so many different places to define variables, things can get extremely confusing if you don't have a clear strategy.
+
+While the list below is long, for now, you only need to understand the most important ones:
+
+- **Role Defaults (Level 2):** These really are just *defaults*. They have almost the lowest precedence and are easily overridden.
+- **Task/Role Vars (Levels 15-17):** Variables defined directly on a task or within a role's `vars` directory have high precedence and will override most other things.
+- **Extra Vars (Level 22):** Variables passed at the command line using `-e` or `--extra-vars` will **always** win precedence.
 
 Here is the order of precedence from least to greatest (the last listed variables override all other variables):
 
@@ -185,12 +201,3 @@ roles:
 ```
 
 Instead of worrying about variable precedence, we encourage you to think about how easily or how often you want to override a variable when deciding where to set it. If you are not sure what other variables are defined, and you need a particular value, use `--extra-vars (-e)` to override all other variables.
-
-### Save to git
-Time to save our progress!
-```bash
-git add .
-git commit -m "variable precedence"
-git push
-
-```
